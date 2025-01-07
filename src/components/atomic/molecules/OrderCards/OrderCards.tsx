@@ -8,28 +8,7 @@ import { RootState } from "../../../../redux/store";
 import { formatToStandardDate } from "../../../utils/formatToStandartDate";
 
 const serverURL = import.meta.env.VITE_BACKEND_URL_STATIC_FILES;
-const dataOrder = {
-    "detalles": [
-        {
-            "idDetalleOrden": 1,
-            "cantidad": 5,
-            "precio_venta": 3000,
-            "codigo": "1000",
-            "nombre": "Samsung Galaxy S24 ULTRA",
-            "subtotal": 15000,
-            "orden_idOrden": 1
-        },
-        {
-            "idDetalleOrden": 2,
-            "cantidad": 5,
-            "precio_venta": 2000,
-            "codigo": "1002",
-            "nombre": "Xiaomi Remi 13 Pro",
-            "subtotal": 10000,
-            "orden_idOrden": 1
-        }
-    ]
-}
+
 export const OrderCards = ({
     order,
     handleDeleteDetailOrder,

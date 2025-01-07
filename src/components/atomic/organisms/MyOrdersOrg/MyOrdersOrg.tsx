@@ -130,7 +130,8 @@ export const MyOrdersOrg = ({ status }: MyOrdersOrgProps) => {
                     <TextInput
                         id="filterData"
                         label="Buscar Orden (Numero de Orden)"
-                        type="text"
+                        type="number"
+                        numberType="int"
                         name="filterData"
                         value={filterData.filterData}
                         onChange={handleChange}
