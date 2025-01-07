@@ -21,6 +21,15 @@ const RoutesElements = [
 
 export const SignUpOrg = () => {
     /**
+     * Redux Services
+     */
+    const { data: rolesDataSV, isLoading: isRolesDataSVLoading } = useGetRolesQuery(undefined);
+    const { data: enterprisesDataSV, isLoading: isEnterprisesLoading, refetch } = useGetEnterprisesQuery(undefined);
+    const [addEnterprise, { isLoading: isAddEnterpriseLoading }] = useAddEnterpriseMutation(undefined);
+    const [addUser, { isLoading: isAddUserLoading }] = useAddUserMutation(undefined);
+
+
+    /**
      * States
      */
     const [currentTab, setCurrentTab] = useState(1);
@@ -48,13 +57,6 @@ export const SignUpOrg = () => {
     const [isLoadingApp, setIsLoadingApp] = useState(false);
     const [rolesData, setRolesData] = useState({})
     const [enterprisesData, setEnterprisesData] = useState({});
-    /**
-     * Redux Services
-     */
-    const { data: rolesDataSV, isLoading: isRolesDataSVLoading } = useGetRolesQuery(undefined);
-    const { data: enterprisesDataSV, isLoading: isEnterprisesLoading, refetch } = useGetEnterprisesQuery(undefined);
-    const [addEnterprise, { isLoading: isAddEnterpriseLoading }] = useAddEnterpriseMutation(undefined);
-    const [addUser, { isLoading: isAddUserLoading }] = useAddUserMutation(undefined);
 
     /**
      * SETEO DE DATA DE SELECTS roles
@@ -85,9 +87,6 @@ export const SignUpOrg = () => {
         setEnterpriseSelected(1);
         setNewUserData({ ...newUserData, empresa_idEmpresa: 1 });
     }, []);
-    useEffect(() => {
-        console.log(newUserData);
-    }, [newUserData]);
 
     /**
      * Mutacion de datos de NUEVO USUARIO
@@ -143,7 +142,7 @@ export const SignUpOrg = () => {
         resolver: yupResolver(signupSchema),
     });
     /**
-     * Manejo de Submit form de NUEVO USUARIOs
+     * Manejo de Submit form de NUEVO USUARIO
      */
     const signupUserForm: SubmitHandler<{
         nombre_completo: string;
@@ -155,7 +154,6 @@ export const SignUpOrg = () => {
         passphrase: string;
         repeat_passphrase: string;
     }> = async (data) => {
-        console.log(data);
         try {
             setIsLoadingApp(true);
             const dataWithUserDetails = {

@@ -8,7 +8,7 @@ import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist
  */
 import counterSlice from './counter/counterSlice';
 import usersSlice from './user/usersSlice';
-import rolesSlice from './roles/rolesSlice';
+import orderDetailsSlice from './orderDetails/orderDetailsSlice';
 
 /**
  * Service Reducers
@@ -16,6 +16,10 @@ import rolesSlice from './roles/rolesSlice';
 import { usersService } from './services/usersService';
 import { rolesService } from './services/rolesService';
 import { enterprisesService } from './services/enterprisesService';
+import { productsService } from './services/productsService';
+import { categoriesService } from './services/categoriesService';
+import { brandsService } from './services/brandsService';
+import { ordersService } from './services/ordersService';
 
 /**
  * Configuración de Redux Persist
@@ -25,7 +29,8 @@ const persistConfig: PersistConfig<RootState> = {
     storage,
     whitelist: [
         'counterPersistentReducer',
-        'userPersistentReducer'
+        'userPersistentReducer',
+        'orderDetailsPersistentReducer'
     ]
 };
 
@@ -35,10 +40,14 @@ const persistConfig: PersistConfig<RootState> = {
 const rootReducer = combineReducers({
     counterPersistentReducer: counterSlice,
     userPersistentReducer: usersSlice,
+    orderDetailsPersistentReducer: orderDetailsSlice,
     [usersService.reducerPath]: usersService.reducer,
     [rolesService.reducerPath]: rolesService.reducer,
-    [enterprisesService.reducerPath]: enterprisesService.reducer
-
+    [enterprisesService.reducerPath]: enterprisesService.reducer,
+    [productsService.reducerPath]: productsService.reducer,
+    [categoriesService.reducerPath]: categoriesService.reducer,
+    [brandsService.reducerPath]: brandsService.reducer,
+    [ordersService.reducerPath]: ordersService.reducer
 });
 
 /**
@@ -62,6 +71,14 @@ export const store = configureStore({
             rolesService.middleware
         ).concat(
             enterprisesService.middleware
+        ).concat(
+            productsService.middleware
+        ).concat(
+            categoriesService.middleware
+        ).concat(
+            brandsService.middleware
+        ).concat(
+            ordersService.middleware
         )
 });
 

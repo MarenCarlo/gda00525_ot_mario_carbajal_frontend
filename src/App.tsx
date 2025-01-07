@@ -3,7 +3,8 @@ import { Navigate, Outlet, Route, Routes } from 'react-router'
 import { DefaultLayout } from './components/layouts/DefaultLayout'
 import { RootState } from './redux/store';
 import { useAppSelector } from './redux/hooks';
-import { Home, Login, Signup } from './pages'
+import { AddProduct, Home, Login, Orders, Signup } from './pages'
+import { EditProduct } from './pages/Home/EditProduct';
 
 function App() {
     const userData = useAppSelector((state: RootState) => state.userPersistentReducer.userData);
@@ -27,9 +28,9 @@ function App() {
                     </ProtectedElement>
                 } />
                 {/**
-                 * 
                  * RUTAS PROTEGIDAS
-                 * 
+                 */}
+                {/**
                  * Home / Inicio
                  */}
                 <Route path="/Home" element={
@@ -40,12 +41,45 @@ function App() {
                     </ProtectedElement>
                 } />
                 {/**
+                 * Home / Inicio
+                 */}
+                <Route path="/Orders" element={
+                    <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true}>
+                        <DefaultLayout>
+                            <Orders />
+                        </DefaultLayout>
+                    </ProtectedElement>
+                } />
+                {/**
+                 * RUTAS ACCESIBLES PARA ADMINISTRADOR
+                 */}
+                {/**
                  * Signup User
                  */}
                 <Route path="/Signup" element={
-                    <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true}>
+                    <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true && userData!.rol.idRol === 1}>
                         <DefaultLayout>
                             <Signup />
+                        </DefaultLayout>
+                    </ProtectedElement>
+                } />
+                {/**
+                 * Editar Producto
+                 */}
+                <Route path="/EditarProducto/:idProducto" element={
+                    <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true && userData!.rol.idRol === 1}>
+                        <DefaultLayout>
+                            <EditProduct />
+                        </DefaultLayout>
+                    </ProtectedElement>
+                } />
+                {/**
+                 * Agregar Producto
+                 */}
+                <Route path="/AgregarProducto" element={
+                    <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true && userData!.rol.idRol === 1}>
+                        <DefaultLayout>
+                            <AddProduct />
                         </DefaultLayout>
                     </ProtectedElement>
                 } />

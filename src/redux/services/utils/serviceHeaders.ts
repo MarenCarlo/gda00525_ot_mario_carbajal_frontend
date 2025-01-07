@@ -2,8 +2,8 @@ import Cookies from 'js-cookie';
 
 interface HeaderProps {
     headers: Headers;
-    acceptType: string;
-    contentType: string;
+    acceptType?: string;
+    contentType?: string;
 }
 
 export const prepareHeadersWithToken = ({ headers, acceptType, contentType }: HeaderProps) => {
@@ -12,7 +12,11 @@ export const prepareHeadersWithToken = ({ headers, acceptType, contentType }: He
     if (authToken) {
         headers.set('auth-token', `${authToken}`);
     }
-    headers.set('accept', acceptType);
-    headers.set('content-type', contentType);
+    if (acceptType) {
+        headers.set('accept', acceptType);
+    }
+    if (contentType) {
+        headers.set('content-type', contentType);
+    }
     return headers;
 };

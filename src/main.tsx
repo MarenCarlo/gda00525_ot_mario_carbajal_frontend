@@ -17,6 +17,7 @@ import { theme } from './theme';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GlobalStyles } from '@mui/material';
+import './main.css';
 
 createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

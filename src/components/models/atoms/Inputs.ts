@@ -15,6 +15,7 @@ export interface InputText {
     error?: boolean;
     helperText?: string;
     variant?: TextFieldVariants;
+    numberType?: string;
 }
 
 export interface SelectFormProps {

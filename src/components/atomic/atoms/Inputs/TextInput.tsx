@@ -13,15 +13,32 @@ export const TextInput = ({
     register,
     error = false,
     helperText,
-    variant = "outlined"
+    variant = "outlined",
+    numberType = 'int'
 }: InputText) => {
+    const isNumber = type === "number";
+
+    // Función para agregar comas cada 3 dígitos y permitir un punto decimal con 2 digitos
+    const formatNumber = (value: string) => {
+        let [integerPart] = value.split('.');
+        integerPart = integerPart.replace(/[^0-9]/g, '');
+        let formattedInteger = integerPart;
+        formattedInteger = '';
+        while (integerPart.length > 3) {
+            formattedInteger = ',' + integerPart.slice(-3) + formattedInteger;
+            integerPart = integerPart.slice(0, -3);
+        }
+        formattedInteger = integerPart + formattedInteger;
+        return formattedInteger;
+    };
+
     return (
         <TextField
             id={id}
             variant={variant}
             name={name}
             label={label}
-            type={type}
+            type={isNumber ? "text" : type}
             disabled={disabled}
             required={required}
             onChange={onChange}
@@ -30,14 +47,38 @@ export const TextInput = ({
             helperText={helperText}
             {...register}
             sx={sx}
-            slotProps={type === 'tel' ? {
-                input: {
-                    inputProps: {
-                        pattern: '[0-9]{8}',
-                        maxLength: 8
+            slotProps={{
+                ...(type === 'tel' && {
+                    input: {
+                        inputProps: {
+                            pattern: '[0-9]{8}',
+                            maxLength: 8,
+                        },
                     },
-                },
-            } : {}}
+                }),
+                ...(isNumber && {
+                    input: {
+                        inputProps: {
+                            inputMode: 'decimal',
+                            onInput: (e: React.FormEvent<HTMLInputElement>) => {
+                                const target = e.target as HTMLInputElement;
+                                let value = target.value;
+                                if (!value.includes('.')) {
+                                    target.value = formatNumber(value);
+                                } else {
+                                    if (numberType === 'int') {
+                                        const [integerPart] = value.split('.');
+                                        target.value = formatNumber(integerPart);
+                                    } else if (numberType === 'decimal') {
+                                        const [integerPart, decimalPart] = value.split('.');
+                                        target.value = formatNumber(integerPart) + '.' + (decimalPart || '').slice(0, 2);
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }),
+            }}
         />
     );
 };

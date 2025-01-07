@@ -24,7 +24,6 @@ export const SignupForm = ({
     };
 
     const handleSelect = (date: Date | undefined) => {
-        console.log("Fecha seleccionada:", date);
         if (date !== undefined) {
             let formatDate = formatToMSSQLDate(date);
             setSelected(date);
