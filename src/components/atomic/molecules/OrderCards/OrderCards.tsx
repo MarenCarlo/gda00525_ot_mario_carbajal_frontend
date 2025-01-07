@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Card, CardContent, Typography, Box, Chip, Paper, Divider, List, ListItem, ListItemAvatar, Avatar, ListItemText, ListItemButton, Grid2, IconButton, } from "@mui/material";
 import { formatCurrencyValue } from "../../../utils/formatCurrencyValue";
-import { AppButton } from "../../atoms";
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import { useAppSelector } from "../../../../redux/hooks";
 import { RootState } from "../../../../redux/store";
+import { formatToStandardDate } from "../../../utils/formatToStandartDate";
 
 const serverURL = import.meta.env.VITE_BACKEND_URL_STATIC_FILES;
 const dataOrder = {
@@ -30,9 +30,12 @@ const dataOrder = {
         }
     ]
 }
-export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder }: any) => {
-    const userData = useAppSelector((state: RootState) => state.userPersistentReducer.userData);
-
+export const OrderCards = ({
+    order,
+    handleDeleteDetailOrder,
+    handleDeleteOrder,
+    isSeller = false
+}: any) => {
     const {
         idOrden,
         fecha_creacion,
@@ -42,11 +45,15 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
         cliente,
         nit_cliente,
         direccion_cliente,
+        empresa_cliente,
+        telefono,
+        email,
         vendedor,
         nit_venta,
         direccion_venta,
+        empresa_venta,
         detalles
-    } = product;
+    } = order;
 
     return (
         <>
@@ -108,12 +115,19 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                                 }}
                             >
                                 {
-                                    isActive ?
-                                        <Chip label={"Activa"} variant="filled" color='info' sx={{ boxShadow: '#000000 0px 0px 5px 0px inset', }} />
-                                        :
-                                        <Chip label={"Desactivada"} variant="filled" color='warning' sx={{ boxShadow: '#000000 0px 0px 5px 0px inset', bgcolor: '#E84133', color: '#FFFFFF' }} />
+                                    status_Orden === 0 &&
+                                    <Chip label={"Cancelada"} variant="filled" color='warning' sx={{ bgcolor: '#E84133', color: '#FFFFFF', boxShadow: '#000000 0px 0px 5px 0px inset', }} />
+                                }
+                                {
+                                    status_Orden === 1 &&
+                                    <Chip label={"Pendiente"} variant="filled" color='warning' sx={{ color: '#FFFFFF', boxShadow: '#000000 0px 0px 5px 0px inset', }} />
+                                }
+                                {
+                                    status_Orden === 2 &&
+                                    <Chip label={"Completada"} variant="filled" color='success' sx={{ color: '#FFFFFF', boxShadow: '#000000 0px 0px 5px 0px inset', }} />
                                 }
                             </Box>
+
                         </Box>
                     </Paper>
 
@@ -132,7 +146,7 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                             }}
                         >
                             <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: '#FFFFFF' }}>
-                                {userData?.empresa.nombre_comercial}
+                                {empresa_cliente}
                             </Typography>
                         </Box>
                     </Box>
@@ -179,7 +193,6 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                             display: "flex",
                             justifyContent: "space-between",
                             alignItems: "center",
-                            mb: { xs: 2 },
                         }}
                     >
                         <Box
@@ -191,6 +204,65 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                         >
                             <Typography variant="body2" color="#AAAAAA" sx={{ fontWeight: 'bold' }}>
                                 {direccion_cliente}
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: { xs: 'center', md: 'flex-start' },
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography variant="body2" color="#AAAAAA" sx={{ fontWeight: 'bold' }}>
+                                {email}
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mb: { xs: 2 },
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: { xs: 'center', md: 'flex-start' },
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography variant="body2" color="#AAAAAA" sx={{ fontWeight: 'bold' }}>
+                                {telefono}
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mb: { xs: 2 },
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: { xs: 'center', md: 'flex-start' },
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <Typography variant="body2" color="#AAAAAA" sx={{ fontWeight: 'bold' }}>
+                                {formatToStandardDate(fecha_creacion)}
                             </Typography>
                         </Box>
                     </Box>
@@ -303,7 +375,7 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                                         </Box>
                                     </Grid2>
                                     {
-                                        status_Orden === 1 &&
+                                        status_Orden === 1 && isSeller === false &&
                                         <ListItemButton
                                             sx={{ display: 'flex', justifyContent: 'flex-end' }}
                                             onClick={() => handleDeleteDetailOrder(item.idDetalleOrden)}
@@ -320,33 +392,6 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                 </CardContent>
                 <CardContent>
                     <Divider sx={{ bgcolor: "#444444", marginBottom: '5px' }} />
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        {
-                            status_Orden === 1 &&
-                            <IconButton
-                                color="primary"
-                                sx={{
-                                    backgroundColor: "#E84133",
-                                    color: "#FFFFFF",
-                                    borderRadius: "50px",
-                                    marginY: "15px",
-                                    padding: "10px",
-                                    "&:hover": {
-                                        backgroundColor: "#F74244",
-                                    },
-                                }}
-                                onClick={() => handleDeleteOrder(idOrden)}
-                            >
-                                <DeleteOutlineOutlinedIcon sx={{ fill: '#FFFFFF', fontSize: 30 }} />
-                            </IconButton>
-                        }
-                    </Box>
                     <Paper
                         sx={{
                             display: 'flex',
@@ -376,16 +421,10 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                                 }}
                             >
                                 {
-                                    status_Orden === 0 &&
-                                    <Chip label={"Cancelada"} variant="filled" color='warning' sx={{ bgcolor: '#E84133', color: '#FFFFFF', boxShadow: '#000000 0px 0px 5px 0px inset', }} />
-                                }
-                                {
-                                    status_Orden === 1 &&
-                                    <Chip label={"Pendiente"} variant="filled" color='warning' sx={{ color: '#FFFFFF', boxShadow: '#000000 0px 0px 5px 0px inset', }} />
-                                }
-                                {
-                                    status_Orden === 2 &&
-                                    <Chip label={"Completada"} variant="filled" color='success' sx={{ color: '#FFFFFF', boxShadow: '#000000 0px 0px 5px 0px inset', }} />
+                                    isActive ?
+                                        <Chip label={"Activa"} variant="filled" color='info' sx={{ boxShadow: '#000000 0px 0px 5px 0px inset', }} />
+                                        :
+                                        <Chip label={"Desactivada"} variant="filled" color='warning' sx={{ boxShadow: '#000000 0px 0px 5px 0px inset', bgcolor: '#E84133', color: '#FFFFFF' }} />
                                 }
                             </Box>
                             <Box
@@ -403,6 +442,73 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                             </Box>
                         </Box>
                     </Paper>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        {
+                            status_Orden === 1 && isSeller === false &&
+                            <IconButton
+                                color="primary"
+                                sx={{
+                                    backgroundColor: "#E84133",
+                                    color: "#FFFFFF",
+                                    borderRadius: "50px",
+                                    marginY: "15px",
+                                    padding: "10px",
+                                    "&:hover": {
+                                        backgroundColor: "#F74244",
+                                    },
+                                }}
+                                onClick={() => handleDeleteOrder(idOrden)}
+                            >
+                                <DeleteOutlineOutlinedIcon sx={{ fill: '#FFFFFF', fontSize: 30 }} />
+                            </IconButton>
+                        }
+                        {
+                            status_Orden === 1 && isSeller === true &&
+                            <>
+                                <IconButton
+                                    color="primary"
+                                    sx={{
+                                        backgroundColor: "#E84133",
+                                        color: "#FFFFFF",
+                                        borderRadius: "50px",
+                                        marginY: "15px",
+                                        marginX: "10px",
+                                        padding: "10px",
+                                        "&:hover": {
+                                            backgroundColor: "#F74244",
+                                        },
+                                    }}
+                                    onClick={() => handleDeleteOrder(idOrden)}
+                                >
+                                    <DeleteOutlineOutlinedIcon sx={{ fill: '#FFFFFF', fontSize: 30 }} />
+                                </IconButton>
+                                <IconButton
+                                    color="success"
+                                    sx={{
+                                        backgroundColor: "#4CAF50",
+                                        color: "#FFFFFF",
+                                        borderRadius: "50px",
+                                        marginY: "15px",
+                                        marginX: "10px",
+                                        padding: "10px",
+                                        "&:hover": {
+                                            backgroundColor: "#3B9E40",
+                                        },
+                                    }}
+                                    onClick={() => handleDeleteDetailOrder(idOrden)}
+                                >
+                                    <CheckOutlinedIcon sx={{ fill: '#FFFFFF', fontSize: 30 }} />
+                                </IconButton>
+                            </>
+                        }
+                    </Box>
+
                 </CardContent>
                 {
                     status_Orden === 2 &&
@@ -424,7 +530,7 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                                     }}
                                 >
                                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: '#FFFFFF' }}>
-                                        Mi Tiendita Online
+                                        {empresa_venta}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -443,7 +549,7 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                                     }}
                                 >
                                     <Typography variant="body2" color="#AAAAAA" sx={{ fontWeight: 'bold' }}>
-                                        2410533-5
+                                        {nit_venta}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -462,7 +568,7 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                                     }}
                                 >
                                     <Typography variant="body2" color="#AAAAAA" sx={{ fontWeight: 'bold' }}>
-                                        Guatemala, C.A
+                                        {direccion_venta}
                                     </Typography>
                                 </Box>
 
@@ -484,7 +590,7 @@ export const OrderCards = ({ product, handleDeleteDetailOrder, handleDeleteOrder
                                     <Typography variant="body2" color="#AAAAAA" sx={{ fontWeight: 'bold' }}>
                                         {
                                             status_Orden === 2 &&
-                                            `Confirmado Por: ${vendedor}`
+                                            `${vendedor}`
                                         }
                                     </Typography>
                                 </Box>

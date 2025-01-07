@@ -5,6 +5,7 @@ import { RootState } from './redux/store';
 import { useAppSelector } from './redux/hooks';
 import { AddProduct, Home, Login, Orders, Signup } from './pages'
 import { EditProduct } from './pages/Home/EditProduct';
+import { PassedOrders } from './pages/PassedOrders';
 
 function App() {
     const userData = useAppSelector((state: RootState) => state.userPersistentReducer.userData);
@@ -47,6 +48,16 @@ function App() {
                     <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true}>
                         <DefaultLayout>
                             <Orders />
+                        </DefaultLayout>
+                    </ProtectedElement>
+                } />
+                {/**
+                 * Ordenes Pasadas
+                 */}
+                <Route path="/Historial" element={
+                    <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true && userData!.rol.idRol === 3}>
+                        <DefaultLayout>
+                            <PassedOrders />
                         </DefaultLayout>
                     </ProtectedElement>
                 } />

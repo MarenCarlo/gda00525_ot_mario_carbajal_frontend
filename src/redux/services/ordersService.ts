@@ -15,8 +15,8 @@ export const ordersService = createApi({
     tagTypes: ['Orders'],
     endpoints: (builder) => ({
         getOrders: builder.query({
-            query: () => ({
-                url: '/orders/getOrders',
+            query: (state?: string) => ({
+                url: state ? `/orders/getOrders/${state}` : '/orders/getOrders',
                 method: 'GET',
                 headers: prepareHeadersWithToken({
                     headers: new Headers(),
@@ -92,6 +92,22 @@ export const ordersService = createApi({
             }),
             invalidatesTags: ['Orders'],
         }),
+        acceptOrder: builder.mutation({
+            query: (orderToAccept) => ({
+                url: `/orders/modifyOrder`,
+                method: 'PUT',
+                body: orderToAccept,
+                headers: prepareHeadersWithToken({
+                    headers: new Headers(),
+                    acceptType: 'application/json',
+                    contentType: 'application/json',
+                }),
+            }),
+            transformResponse: (response: any) => ({
+                ...response,
+            }),
+            invalidatesTags: ['Orders'],
+        }),
     }),
 });
 
@@ -100,5 +116,6 @@ export const {
     useAddOrderMutation,
     useGetOwnOrdersQuery,
     useDeleteOrderDetailMutation,
-    useDeleteOrderMutation
+    useDeleteOrderMutation,
+    useAcceptOrderMutation
 } = ordersService;

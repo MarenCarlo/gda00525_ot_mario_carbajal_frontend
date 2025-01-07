@@ -118,7 +118,8 @@ export const NavBar = () => {
         { label: 'Agregar Producto', link: '/AgregarProducto', role: [1] },
         { label: 'Ordenes Pendientes', link: '/Home', role: [2] },
         { label: 'Tienda', link: '/Home', role: [3] },
-        { label: 'Mis Ordenes', link: '/Orders', role: [3] },
+        { label: 'Ordenes En Proceso', link: '/Orders', role: [3] },
+        { label: 'Ordenes Pasadas', link: '/Historial', role: [3] },
     ];
     const filterMenuItemsByRole = (userRole: number, menuItems: { label: string; link: string; role: number[] }[]) => {
         return menuItems.filter(item => item.role?.includes(userRole));

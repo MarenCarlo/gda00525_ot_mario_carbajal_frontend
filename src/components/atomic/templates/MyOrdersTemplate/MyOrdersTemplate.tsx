@@ -4,7 +4,7 @@ import { MyOrdersOrg } from '../../organisms'
 export const MyOrdersTemplate = () => {
     return (
         <>
-            <MyOrdersOrg />
+            <MyOrdersOrg status={1} />
         </>
     )
 }
