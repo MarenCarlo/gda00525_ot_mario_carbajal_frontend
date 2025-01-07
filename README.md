@@ -1,3 +1,7 @@
+VARIABLES DE ENTORNO REQUERIDAS:
+VITE_BACKEND_URL=http://localhost:3000/api/v1
+VITE_BACKEND_URL_STATIC_FILES=http://localhost:3000
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
