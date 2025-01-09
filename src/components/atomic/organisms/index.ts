@@ -5,3 +5,4 @@ export * from './AddProductOrg';
 export * from './StoreOrg';
 export * from './MyOrdersOrg';
 export * from './OrderPendienteOrg';
+export * from './UsuariosOrg';

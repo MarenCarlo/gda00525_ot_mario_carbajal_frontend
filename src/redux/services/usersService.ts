@@ -15,6 +15,7 @@ export const usersService = createApi({
             });
         },
     }),
+    tagTypes: ['Usuarios'],
     endpoints: (builder) => ({
         authUser: builder.mutation({
             query: (userData) => ({
@@ -41,8 +42,34 @@ export const usersService = createApi({
                     ...response
                 };
             },
+            invalidatesTags: ['Usuarios']
+        }),
+        editStateUser: builder.mutation({
+            query: (userData) => ({
+                url: '/users/modifyUser',
+                method: 'PUT',
+                body: userData
+            }),
+            transformResponse: (response: any) => {
+                return {
+                    ...response
+                };
+            },
+            invalidatesTags: ['Usuarios']
+        }),
+        getUsers: builder.query({
+            query: () => ({
+                url: '/users/getUsers/',
+                method: 'GET'
+            }),
+            transformResponse: (response: any) => {
+                return {
+                    ...response
+                };
+            },
+            providesTags: ['Usuarios']
         }),
     }),
 });
 
-export const { useAuthUserMutation, useAddUserMutation } = usersService;
+export const { useAuthUserMutation, useAddUserMutation, useGetUsersQuery, useEditStateUserMutation } = usersService;

@@ -3,7 +3,7 @@ import { Navigate, Outlet, Route, Routes } from 'react-router'
 import { DefaultLayout } from './components/layouts/DefaultLayout'
 import { RootState } from './redux/store';
 import { useAppSelector } from './redux/hooks';
-import { AddProduct, Home, Login, Orders, Signup } from './pages'
+import { AddProduct, Home, Login, Orders, Signup, Usuarios } from './pages'
 import { EditProduct } from './pages/Home/EditProduct';
 import { PassedOrders } from './pages/PassedOrders';
 
@@ -71,6 +71,16 @@ function App() {
                     <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true && userData!.rol.idRol === 1}>
                         <DefaultLayout>
                             <Signup />
+                        </DefaultLayout>
+                    </ProtectedElement>
+                } />
+                {/**
+                 * Listado de Usuarios
+                 */}
+                <Route path="/Users" element={
+                    <ProtectedElement redirectTo={"/"} isAllowed={userData && userData!.isLogged === true && userData!.rol.idRol === 1}>
+                        <DefaultLayout>
+                            <Usuarios />
                         </DefaultLayout>
                     </ProtectedElement>
                 } />

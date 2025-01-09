@@ -9,7 +9,6 @@ import { useAddEnterpriseMutation, useGetEnterprisesQuery } from '../../../../re
 import { enterpriseSchema } from '../../../yup/enterpriseSchema';
 import { useAddUserMutation } from '../../../../redux/services/usersService';
 import { signupSchema } from '../../../yup/signupSchema';
-import * as Yup from 'yup';
 
 /**
  * BUTTON ACTIONS

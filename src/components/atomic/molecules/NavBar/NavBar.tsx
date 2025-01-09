@@ -115,6 +115,7 @@ export const NavBar = () => {
     const availableMenuItems = [
         { label: 'Inicio', link: '/Home', role: [1] },
         { label: 'Registrar Usuario', link: '/Signup', role: [1] },
+        { label: 'Usuarios', link: '/Users', role: [1] },
         { label: 'Agregar Producto', link: '/AgregarProducto', role: [1] },
         { label: 'Ordenes Pendientes', link: '/Home', role: [2] },
         { label: 'Tienda', link: '/Home', role: [3] },
