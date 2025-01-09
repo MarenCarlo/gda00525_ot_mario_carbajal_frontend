@@ -15,7 +15,7 @@ import { ProtectedComponent } from '../../../middlewares/ProtectedComponent';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { persistStore } from 'redux-persist';
 import { useEffect, useState } from 'react';
-import { useLazyGetProductsPublicQuery } from '../../../../redux/services/productsService';
+import { productsService, useLazyGetProductsPublicQuery } from '../../../../redux/services/productsService';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { eliminarDetalle, limpiarDetalles } from '../../../../redux/orderDetails/orderDetailsSlice';
 import { AppButton } from '../../atoms';
@@ -182,6 +182,7 @@ export const NavBar = () => {
                     handleEliminar(producto.idProducto);
                 });
                 clickOnLink();
+                await dispatch(productsService.util.invalidateTags(["Products"]));
                 toast.success(`${response.message}: ${formatCurrencyValue(response.data.totalOrden)}`, toastOptions);
                 console.log('despues: ', productosCartData);
             }

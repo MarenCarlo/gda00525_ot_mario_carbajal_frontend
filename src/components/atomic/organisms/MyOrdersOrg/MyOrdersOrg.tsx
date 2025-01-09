@@ -5,12 +5,18 @@ import { ConfirmModal, OrderCards } from "../../molecules";
 import { toast } from "react-toastify";
 import { toastOptions } from "../../../utils/toastOptions";
 import { TextInput } from "../../atoms";
+import { productsService } from "../../../../redux/services/productsService";
+import { useAppDispatch } from "../../../../redux/hooks";
 
 interface MyOrdersOrgProps {
     status: number;
 }
 
 export const MyOrdersOrg = ({ status }: MyOrdersOrgProps) => {
+    /**
+     * Redux
+     */
+    const dispatch = useAppDispatch();
     const [deleteOrder, { isLoading: isDeleteOrderLoading }] = useDeleteOrderMutation();
     const [deleteOrderDetail, { isLoading: isDeleteOrderDetailLoading }] = useDeleteOrderDetailMutation();
     const { data: ordersDataSV, isLoading: isOrdersLoading } = useGetOwnOrdersQuery(undefined);
@@ -114,6 +120,7 @@ export const MyOrdersOrg = ({ status }: MyOrdersOrgProps) => {
             if (response.error === false) {
                 toast.success(response.message, toastOptions);
                 setIdOrdenSelected(0);
+                await dispatch(productsService.util.invalidateTags(["Products"]));
             }
         } catch (error: any) {
             toast.error(error.data.message, toastOptions);
