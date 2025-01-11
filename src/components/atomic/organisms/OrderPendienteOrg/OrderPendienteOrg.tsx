@@ -1,5 +1,5 @@
 import { Divider, Grid2 } from "@mui/material"
-import { useAcceptOrderMutation, useDeleteOrderDetailMutation, useGetOrdersQuery } from "../../../../redux/services/ordersService";
+import { useAcceptOrderMutation, useDeleteOrderMutation, useGetOrdersQuery } from "../../../../redux/services/ordersService";
 import { useEffect, useState } from "react";
 import { ConfirmModal, OrderCards } from "../../molecules";
 import { toast } from "react-toastify";
@@ -13,7 +13,7 @@ export const OrderPendienteOrg = () => {
 
     const state = 1;
     const [acceptOrder, { isLoading: isAcceptOrderLoading }] = useAcceptOrderMutation();
-    const [deleteOrderDetail, { isLoading: isDeleteOrderDetailLoading }] = useDeleteOrderDetailMutation();
+    const [deleteOrder, { isLoading: isDeleteOrderLoading }] = useDeleteOrderMutation();
     const { data: ordersDataSV, isLoading: isOrdersLoading } = useGetOrdersQuery(state.toString());
 
     /**
@@ -110,10 +110,9 @@ export const OrderPendienteOrg = () => {
             idOrden: idProducto,
             status_Orden: 1,
             isActive: false,
-            usuarioVendedor_idUsuario: userData.idUsuario
         }
         try {
-            const response = await acceptOrder(orderToDelete).unwrap();
+            const response = await deleteOrder(orderToDelete).unwrap();
             if (response.error === false) {
                 toast.success(response.message, toastOptions);
                 setIdOrdenSelected(0);
@@ -176,6 +175,15 @@ export const OrderPendienteOrg = () => {
                 isLoading={isOrdersLoading || isLoadingApp || isAcceptOrderLoading}
                 questionText="¿Estás seguro que quieres aceptar esta Orden?"
                 buttonText="Aceptar"
+            />
+            <ConfirmModal
+                open={openDeleteOrder}
+                idObject={Number(idOrdenSelected)}
+                handleClose={handleCloseOrderDelete}
+                clickActionButton={clickActionDeleteOrderButton}
+                isLoading={isOrdersLoading || isLoadingApp || isDeleteOrderLoading}
+                questionText="¿Estás seguro que quieres eliminar la orden?"
+                buttonText="Eliminar"
             />
         </>
     )

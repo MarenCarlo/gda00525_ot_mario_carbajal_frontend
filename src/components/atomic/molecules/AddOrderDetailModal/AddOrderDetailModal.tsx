@@ -46,7 +46,7 @@ export const AddOrderDetailModal = ({
                 <Fade in={open}>
                     <Box sx={style}>
                         <Typography variant="body2" color="#AAAAAA" sx={{ fontWeight: 'bold' }}>
-                            Agregando Ingreso de Stock a:
+                            Agregando Cantidad de Producto:
                         </Typography>
                         <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: '#FFFFFF', mb: 2 }}>
                             {productSelected.nombre}
@@ -84,7 +84,7 @@ export const AddOrderDetailModal = ({
                                 sx={{ width: '100%' }}
                                 isLoading={isLoading}
                             >
-                                Agregar Categoría
+                                Agregar Producto a Orden
                             </AppButton>
                         </Box>
                     </Box>
